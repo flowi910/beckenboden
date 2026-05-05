@@ -424,7 +424,7 @@
     /* ─── KONTAKT ─── */
     #kontakt { background: var(--cream-mid); }
     .kontakt-inner { max-width: 1280px; margin: 0 auto; padding: 120px 80px; }
-    .kontakt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: start; }
+    .kontakt-grid { display: grid; grid-template-columns: 1fr; max-width: 640px; }
     .kontakt-left {}
     .kontakt-title { color: var(--ink); margin-bottom: 28px; }
     .kontakt-sub {
@@ -972,50 +972,6 @@
             </a>
           </div>
         </div>
-        <div class="kontakt-form-wrap">
-          <p class="form-eyebrow">Nachricht senden</p>
-          <form class="kontakt-form" onsubmit="handleKontakt(event)">
-            <div class="form-row">
-              <div class="form-field">
-                <label class="form-label" for="k-name">Name <span class="form-req">*</span></label>
-                <input class="form-input" type="text" id="k-name" name="name" placeholder="Dein Name" required />
-              </div>
-              <div class="form-field">
-                <label class="form-label" for="k-email">E-Mail <span class="form-req">*</span></label>
-                <input class="form-input" type="email" id="k-email" name="email" placeholder="deine@email.de" required />
-              </div>
-            </div>
-            <div class="form-field">
-              <label class="form-label" for="k-betreff">Betreff</label>
-              <select class="form-input form-select" id="k-betreff" name="betreff">
-                <option value="" disabled selected>Bitte wählen …</option>
-                <option value="kurs">Frage zum Kurs</option>
-                <option value="anmeldung">Anmeldung / Warteliste</option>
-                <option value="preis">Preise & Konditionen</option>
-                <option value="sonstiges">Sonstiges</option>
-              </select>
-            </div>
-            <div class="form-field">
-              <label class="form-label" for="k-nachricht">Nachricht <span class="form-req">*</span></label>
-              <textarea class="form-input form-textarea" id="k-nachricht" name="nachricht" rows="5" placeholder="Was möchtest du wissen?" required></textarea>
-            </div>
-            <div class="form-footer-row">
-              <p class="form-privacy">Mit dem Absenden stimmst du der <a href="#">Datenschutzerklärung</a> zu.</p>
-              <button type="submit" class="btn-submit">
-                <span>Senden</span>
-                <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                </svg>
-              </button>
-            </div>
-            <div class="form-success" id="k-success">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-              </svg>
-              <p>Danke für deine Nachricht! Ich melde mich bald.</p>
-            </div>
-          </form>
-        </div>
       </div>
     </div>
   </section>
@@ -1182,12 +1138,6 @@
       document.getElementById('anm-success').classList.add('visible');
     }
 
-    function handleKontakt(e) {
-      e.preventDefault();
-      const form = e.target;
-      form.querySelectorAll('input, select, textarea, button').forEach(el => el.disabled = true);
-      document.getElementById('k-success').classList.add('visible');
-    }
   </script>
 
 </body>
