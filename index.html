@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhysioTina · Beckenboden</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:       oklch(96.5% 0.022 75);
+      --cream-dark:  oklch(92%   0.028 72);
+      --cream-mid:   oklch(94%   0.025 73);
+      --ink:         oklch(22%   0.012 52);
+      --ink-muted:   oklch(52%   0.010 52);
+      --rose:        oklch(61%   0.095 28);
+      --rose-light:  oklch(90%   0.038 28);
+      --rose-deep:   oklch(52%   0.095 28);
+      --gold:        oklch(75%   0.100 72);
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'DM Sans', Helvetica, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 60px; height: 72px;
+      background: color-mix(in oklch, var(--cream) 93%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid color-mix(in oklch, var(--ink) 8%, transparent);
+    }
+    .logo-wrap { display: flex; flex-direction: column; gap: 4px; text-decoration: none; }
+    .logo-main {
+      font-family: var(--font-display); font-size: 22px; font-weight: 400;
+      letter-spacing: 0.02em; line-height: 1; color: var(--ink);
+    }
+    .logo-main span { color: var(--rose); font-style: italic; }
+    .logo-sub {
+      font-family: var(--font-body); font-size: 8.5px; font-weight: 400;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--rose);
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-family: var(--font-body); font-size: 13px; font-weight: 400;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-muted); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--rose); }
+    .nav-cta {
+      font-family: var(--font-body); font-size: 12px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--cream); background: var(--rose);
+      border: none; padding: 10px 24px; cursor: pointer;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--rose-deep); }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      padding-top: 72px;
+    }
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 60px 80px 80px;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-body); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--rose); margin-bottom: 28px;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(46px, 5.2vw, 84px);
+      font-weight: 300; line-height: 1.06; letter-spacing: -0.01em;
+      color: var(--ink); margin-bottom: 32px;
+    }
+    .hero-title em { font-style: italic; color: var(--rose); }
+    .hero-sub {
+      font-family: var(--font-body); font-size: 16px; font-weight: 300;
+      line-height: 1.8; color: var(--ink-muted);
+      max-width: 460px; margin-bottom: 52px;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+    .btn-primary {
+      font-family: var(--font-body); font-size: 13px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--cream); background: var(--ink);
+      border: none; padding: 15px 34px; cursor: pointer;
+      text-decoration: none; display: inline-block;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--rose); }
+    .btn-ghost {
+      font-family: var(--font-body); font-size: 13px; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-muted); text-decoration: none;
+      border-bottom: 1px solid var(--ink-muted); padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--rose); border-color: var(--rose); }
+    .hero-badge {
+      margin-top: 48px; padding: 16px 20px;
+      background: color-mix(in oklch, var(--rose) 10%, var(--cream));
+      border-left: 3px solid var(--rose);
+      font-size: 13px; color: var(--ink-muted); max-width: 440px;
+    }
+    .hero-badge strong { color: var(--ink); font-weight: 500; }
+    .hero-right { position: relative; overflow: hidden; background: var(--cream-dark); }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+    .hero-scroll-hint {
+      position: absolute; bottom: 40px; left: 80px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-muted);
+    }
+    .hero-scroll-hint::before { content: ''; display: block; width: 40px; height: 1px; background: var(--ink-muted); }
+
+    /* ─── SHARED ─── */
+    .section-eyebrow {
+      font-family: var(--font-body); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--rose); margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 4vw, 62px);
+      font-weight: 300; line-height: 1.1;
+    }
+    .section-title em { font-style: italic; color: var(--rose); }
+
+    /* ─── DER KURS ─── */
+    #kurs { background: var(--ink); }
+    .kurs-inner { max-width: 1280px; margin: 0 auto; padding: 120px 80px; }
+    .kurs-header { margin-bottom: 72px; }
+    .kurs-header .section-title { color: var(--cream); }
+    .kurs-header .section-eyebrow { color: var(--rose); }
+    .kurs-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: color-mix(in oklch, var(--cream) 10%, transparent);
+      margin-bottom: 80px;
+    }
+    .kurs-card {
+      background: var(--ink); padding: 44px 36px;
+      transition: background 0.25s; cursor: default;
+    }
+    .kurs-card:hover { background: oklch(28% 0.012 52); }
+    .kurs-num {
+      font-family: var(--font-display); font-size: 13px; font-weight: 400;
+      letter-spacing: 0.1em; color: var(--rose); margin-bottom: 22px;
+    }
+    .kurs-card-title {
+      font-family: var(--font-display); font-size: 24px; font-weight: 400;
+      color: var(--cream); margin-bottom: 12px; line-height: 1.2;
+    }
+    .kurs-card-text {
+      font-family: var(--font-body); font-size: 14px; font-weight: 300;
+      line-height: 1.75; color: color-mix(in oklch, var(--cream) 58%, var(--ink));
+    }
+
+    /* ─── DETAILS BAND ─── */
+    .kurs-details {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid color-mix(in oklch, var(--cream) 12%, var(--ink));
+    }
+    .kurs-detail {
+      padding: 36px 0 36px 0;
+      border-right: 1px solid color-mix(in oklch, var(--cream) 12%, var(--ink));
+    }
+    .kurs-detail:first-child { padding-left: 0; }
+    .kurs-detail:last-child { border-right: none; padding-right: 0; padding-left: 36px; }
+    .kurs-detail:not(:first-child):not(:last-child) { padding-left: 36px; }
+    .detail-label {
+      font-family: var(--font-body); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--rose); margin-bottom: 10px;
+    }
+    .detail-value {
+      font-family: var(--font-display); font-size: 26px; font-weight: 400;
+      color: var(--cream); line-height: 1.15;
+    }
+    .detail-sub {
+      font-family: var(--font-body); font-size: 13px; font-weight: 300;
+      color: color-mix(in oklch, var(--cream) 45%, var(--ink));
+      margin-top: 6px;
+    }
+    @media (max-width: 900px) {
+      .kurs-inner { padding: 80px 24px; }
+      .kurs-grid { grid-template-columns: 1fr; }
+      .kurs-details { grid-template-columns: 1fr 1fr; gap: 1px; background: color-mix(in oklch, var(--cream) 10%, transparent); }
+      .kurs-detail { padding: 28px 20px; border-right: none; }
+    }
+
+    /* ─── PREIS ─── */
+    #preis { background: var(--cream-dark); }
+    .preis-inner { max-width: 1100px; margin: 0 auto; padding: 120px 80px; }
+    .preis-header { margin-bottom: 64px; }
+    .preis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .preis-card {
+      background: var(--cream); padding: 52px 44px;
+      border: 1px solid color-mix(in oklch, var(--ink) 10%, transparent);
+      position: relative; transition: border-color 0.2s;
+    }
+    .preis-card:hover { border-color: var(--rose); }
+    .preis-card--featured {
+      background: var(--ink); border-color: var(--ink);
+    }
+    .preis-badge {
+      position: absolute; top: -12px; left: 44px;
+      font-family: var(--font-body); font-size: 10px; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--cream); background: var(--rose);
+      padding: 4px 14px;
+    }
+    .preis-label {
+      font-family: var(--font-body); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--rose); margin-bottom: 16px;
+    }
+    .preis-amount {
+      font-family: var(--font-display); font-size: 72px; font-weight: 300;
+      line-height: 1; letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .preis-card .preis-amount { color: var(--ink); }
+    .preis-card--featured .preis-amount { color: var(--cream); }
+    .preis-amount sup {
+      font-family: var(--font-body); font-size: 22px; font-weight: 300;
+      vertical-align: super; line-height: 0;
+    }
+    .preis-unit {
+      font-family: var(--font-body); font-size: 14px; font-weight: 300;
+      color: var(--ink-muted); margin-bottom: 32px;
+    }
+    .preis-card--featured .preis-unit { color: color-mix(in oklch, var(--cream) 55%, var(--ink)); }
+    .preis-features { display: flex; flex-direction: column; gap: 14px; }
+    .preis-feature {
+      display: flex; align-items: baseline; gap: 14px;
+      font-family: var(--font-body); font-size: 15px; font-weight: 300;
+      color: var(--ink-muted);
+    }
+    .preis-card--featured .preis-feature { color: color-mix(in oklch, var(--cream) 65%, var(--ink)); }
+    .preis-feature::before {
+      content: '—'; color: var(--rose); flex-shrink: 0;
+      font-family: var(--font-body); font-size: 13px;
+    }
+    .preis-note {
+      margin-top: 48px; padding: 20px 24px;
+      background: color-mix(in oklch, var(--gold) 12%, var(--cream));
+      border-left: 3px solid var(--gold);
+      font-size: 14px; color: var(--ink-muted); line-height: 1.7;
+    }
+    .preis-note strong { color: var(--ink); font-weight: 500; }
+    @media (max-width: 900px) {
+      .preis-inner { padding: 80px 24px; }
+      .preis-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── ÜBER TINA ─── */
+    #ueber-tina { background: var(--cream); overflow: hidden; }
+    .ueber-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 720px; }
+    .ueber-image-col { position: relative; background: var(--cream-dark); }
+    .ueber-image-wrap { position: relative; width: 100%; height: 100%; min-height: 600px; }
+    .ueber-photo {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top; display: block;
+    }
+    .ueber-deco {
+      position: absolute; bottom: -40px; right: -40px;
+      width: 160px; height: 160px; border: 1px solid var(--rose-light); pointer-events: none;
+    }
+    .ueber-text-col {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 100px 80px;
+    }
+    .ueber-title { color: var(--ink); margin-bottom: 32px; }
+    .ueber-body {
+      font-size: 17px; font-weight: 300; line-height: 1.85;
+      color: var(--ink-muted); margin-bottom: 20px; max-width: 520px;
+    }
+    .ueber-quals {
+      margin-top: 48px;
+      border-top: 1px solid color-mix(in oklch, var(--ink) 10%, transparent);
+    }
+    .ueber-qual {
+      display: flex; align-items: baseline; gap: 20px;
+      padding: 18px 0;
+      border-bottom: 1px solid color-mix(in oklch, var(--ink) 10%, transparent);
+    }
+    .qual-label {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--rose); min-width: 130px; flex-shrink: 0;
+    }
+    .qual-value {
+      font-family: var(--font-display); font-size: 19px; font-weight: 400; color: var(--ink);
+    }
+    @media (max-width: 900px) {
+      .ueber-grid { grid-template-columns: 1fr; }
+      .ueber-image-wrap { min-height: 320px; }
+      .ueber-text-col { padding: 60px 24px; }
+      .ueber-deco { display: none; }
+    }
+
+    /* ─── ANMELDUNG / WARTELISTE ─── */
+    #anmeldung { background: var(--ink); }
+    .anmeldung-inner { max-width: 1280px; margin: 0 auto; padding: 120px 80px; }
+    .anmeldung-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; }
+    .anmeldung-left { display: flex; flex-direction: column; justify-content: center; }
+    .anmeldung-title {
+      font-family: var(--font-display);
+      font-size: clamp(44px, 4.5vw, 72px);
+      font-weight: 300; line-height: 1.06;
+      color: var(--cream); margin-bottom: 28px;
+    }
+    .anmeldung-title em { font-style: italic; color: var(--rose); }
+    .anmeldung-sub {
+      font-size: 16px; font-weight: 300; line-height: 1.8;
+      color: color-mix(in oklch, var(--cream) 55%, var(--ink));
+      margin-bottom: 40px; max-width: 420px;
+    }
+    .anmeldung-info-list { display: flex; flex-direction: column; gap: 0; }
+    .anmeldung-info-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 0;
+      border-bottom: 1px solid color-mix(in oklch, var(--cream) 10%, var(--ink));
+    }
+    .anmeldung-info-row:first-child { border-top: 1px solid color-mix(in oklch, var(--cream) 10%, var(--ink)); }
+    .info-key {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--rose);
+    }
+    .info-val {
+      font-family: var(--font-display); font-size: 20px; font-weight: 400; color: var(--cream);
+      text-align: right;
+    }
+
+    /* Form */
+    .anmeldung-form-wrap {}
+    .form-eyebrow {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--rose); margin-bottom: 32px;
+    }
+    .anmeldung-form { display: flex; flex-direction: column; gap: 18px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-field { display: flex; flex-direction: column; gap: 7px; }
+    .form-label {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+      color: color-mix(in oklch, var(--cream) 45%, var(--ink));
+    }
+    .form-req { color: var(--rose); }
+    .form-opt { font-weight: 300; text-transform: none; letter-spacing: 0; font-size: 10px; }
+    .form-input {
+      background: color-mix(in oklch, var(--cream) 4%, var(--ink));
+      border: 1px solid color-mix(in oklch, var(--cream) 12%, var(--ink));
+      color: var(--cream);
+      font-family: var(--font-body); font-size: 15px; font-weight: 300;
+      padding: 13px 15px; outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%; appearance: none; -webkit-appearance: none;
+    }
+    .form-input::placeholder { color: color-mix(in oklch, var(--cream) 20%, var(--ink)); }
+    .form-input:focus {
+      border-color: var(--rose);
+      background: color-mix(in oklch, var(--cream) 7%, var(--ink));
+    }
+    .form-select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c27b6e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px;
+    }
+    .form-select option { background: oklch(22% 0.012 52); color: var(--cream); }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .form-footer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .form-privacy {
+      font-size: 12px; font-weight: 300;
+      color: color-mix(in oklch, var(--cream) 28%, var(--ink)); line-height: 1.6;
+    }
+    .form-privacy a { color: var(--rose); text-decoration: none; }
+    .btn-submit {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--rose); color: var(--cream); border: none;
+      font-family: var(--font-body); font-size: 13px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 14px 28px; cursor: pointer; white-space: nowrap;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover { background: var(--rose-deep); transform: translateY(-1px); }
+    .btn-arrow { width: 16px; height: 16px; transition: transform 0.2s; }
+    .btn-submit:hover .btn-arrow { transform: translateX(3px); }
+    .form-success {
+      display: none; align-items: center; gap: 14px;
+      padding: 18px 22px;
+      background: color-mix(in oklch, var(--rose) 14%, var(--ink));
+      border: 1px solid var(--rose); color: var(--rose);
+      font-size: 15px; font-weight: 300;
+    }
+    .form-success svg { width: 22px; height: 22px; flex-shrink: 0; }
+    .form-success.visible { display: flex; }
+    @media (max-width: 900px) {
+      .anmeldung-inner { padding: 80px 24px; }
+      .anmeldung-grid { grid-template-columns: 1fr; gap: 60px; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-footer-row { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ─── KONTAKT ─── */
+    #kontakt { background: var(--cream-mid); }
+    .kontakt-inner { max-width: 1280px; margin: 0 auto; padding: 120px 80px; }
+    .kontakt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: start; }
+    .kontakt-left {}
+    .kontakt-title { color: var(--ink); margin-bottom: 28px; }
+    .kontakt-sub {
+      font-size: 16px; font-weight: 300; line-height: 1.8;
+      color: var(--ink-muted); max-width: 400px; margin-bottom: 44px;
+    }
+    .whatsapp-btn {
+      display: inline-flex; align-items: center; gap: 14px;
+      background: #25D366; color: #fff;
+      font-family: var(--font-body); font-size: 13px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 15px 30px; text-decoration: none; margin-bottom: 16px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .whatsapp-btn:hover { background: #1ebe5d; transform: translateY(-1px); }
+    .whatsapp-icon { width: 20px; height: 20px; }
+    .insta-btn {
+      display: inline-flex; align-items: center; gap: 14px;
+      background: transparent; color: var(--ink);
+      font-family: var(--font-body); font-size: 13px; font-weight: 400;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 14px 30px; text-decoration: none; margin-bottom: 40px;
+      border: 1px solid color-mix(in oklch, var(--ink) 18%, transparent);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .insta-btn:hover { border-color: var(--rose); color: var(--rose); }
+    .insta-icon { width: 20px; height: 20px; }
+    .kontakt-channels {
+      border-top: 1px solid color-mix(in oklch, var(--ink) 10%, transparent);
+    }
+    .kontakt-channel {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid color-mix(in oklch, var(--ink) 10%, transparent);
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .kontakt-channel:hover { opacity: 0.6; }
+    .ch-left { display: flex; align-items: center; gap: 16px; }
+    .ch-icon {
+      width: 34px; height: 34px; flex-shrink: 0;
+      border: 1px solid color-mix(in oklch, var(--ink) 15%, transparent);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ch-icon svg { width: 15px; height: 15px; }
+    .ch-label {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--rose);
+    }
+    .ch-val {
+      font-family: var(--font-display); font-size: 19px; font-weight: 400; color: var(--ink);
+    }
+    .ch-arrow { color: var(--ink-muted); font-size: 16px; }
+
+    /* Kontaktformular rechts */
+    .kontakt-form-wrap {}
+    .kontakt-form { display: flex; flex-direction: column; gap: 18px; }
+    .kontakt-form .form-input {
+      background: var(--cream);
+      border: 1px solid color-mix(in oklch, var(--ink) 15%, transparent);
+      color: var(--ink);
+    }
+    .kontakt-form .form-input::placeholder { color: color-mix(in oklch, var(--ink) 28%, transparent); }
+    .kontakt-form .form-input:focus { border-color: var(--rose); background: var(--cream); }
+    .kontakt-form .form-label { color: color-mix(in oklch, var(--ink) 60%, transparent); }
+    .kontakt-form .form-privacy { color: var(--ink-muted); }
+    .kontakt-form .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c27b6e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
+    .kontakt-form .form-select option { background: var(--cream); color: var(--ink); }
+    .kontakt-form .form-success {
+      background: color-mix(in oklch, var(--rose) 10%, var(--cream));
+      border-color: var(--rose); color: var(--rose-deep);
+    }
+    @media (max-width: 900px) {
+      .kontakt-inner { padding: 80px 24px; }
+      .kontakt-grid { grid-template-columns: 1fr; gap: 60px; }
+    }
+
+    /* ─── MITGLIEDER ─── */
+    #mitglieder { background: var(--cream); }
+    .mitglieder-inner { max-width: 900px; margin: 0 auto; padding: 120px 80px; }
+    .mitglieder-header { margin-bottom: 56px; }
+    .mitglieder-title { color: var(--ink); margin-bottom: 16px; }
+    .mitglieder-sub {
+      font-size: 16px; font-weight: 300; line-height: 1.75; color: var(--ink-muted); max-width: 540px;
+    }
+    .pw-form { display: flex; gap: 12px; max-width: 480px; }
+    .pw-input {
+      flex: 1;
+      background: var(--cream-dark);
+      border: 1px solid color-mix(in oklch, var(--ink) 15%, transparent);
+      color: var(--ink);
+      font-family: var(--font-body); font-size: 15px; font-weight: 300;
+      padding: 13px 16px; outline: none;
+      transition: border-color 0.2s;
+    }
+    .pw-input:focus { border-color: var(--rose); }
+    .pw-input::placeholder { color: var(--ink-muted); }
+    .pw-btn {
+      font-family: var(--font-body); font-size: 12px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--cream); background: var(--ink);
+      border: none; padding: 13px 24px; cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .pw-btn:hover { background: var(--rose); }
+    .pw-error {
+      display: none; margin-top: 12px;
+      font-size: 13px; color: var(--rose); font-weight: 400;
+    }
+    .pw-error.visible { display: block; }
+    #member-content { display: none; }
+    #member-content.visible { display: block; }
+    .member-welcome {
+      padding: 24px 28px; margin-bottom: 48px;
+      background: color-mix(in oklch, var(--rose) 8%, var(--cream));
+      border-left: 3px solid var(--rose);
+      font-size: 14px; color: var(--ink-muted);
+    }
+    .member-welcome strong { color: var(--ink); font-weight: 500; }
+    .pdf-section-title {
+      font-family: var(--font-display); font-size: 28px; font-weight: 400;
+      color: var(--ink); margin-bottom: 28px;
+    }
+    .pdf-list { display: flex; flex-direction: column; gap: 1px; background: color-mix(in oklch, var(--ink) 8%, transparent); margin-bottom: 48px; }
+    .pdf-item {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; padding: 22px 24px;
+      background: var(--cream);
+      text-decoration: none; transition: background 0.2s;
+    }
+    .pdf-item:hover { background: var(--cream-dark); }
+    .pdf-item-left { display: flex; align-items: center; gap: 18px; }
+    .pdf-icon {
+      width: 38px; height: 38px; flex-shrink: 0;
+      background: color-mix(in oklch, var(--rose) 12%, var(--cream-dark));
+      border: 1px solid var(--rose-light);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pdf-icon svg { width: 18px; height: 18px; }
+    .pdf-name {
+      font-family: var(--font-display); font-size: 19px; font-weight: 400; color: var(--ink);
+    }
+    .pdf-meta { font-size: 12px; color: var(--ink-muted); font-weight: 300; margin-top: 2px; }
+    .pdf-download {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--rose);
+    }
+    .pdf-placeholder {
+      padding: 22px 24px; background: var(--cream-dark);
+      color: var(--ink-muted); font-size: 14px; font-weight: 300;
+      border: 1px dashed color-mix(in oklch, var(--ink) 15%, transparent);
+      font-style: italic;
+    }
+    @media (max-width: 900px) {
+      .mitglieder-inner { padding: 80px 24px; }
+      .pw-form { flex-direction: column; }
+    }
+
+    /* ─── FAQ ─── */
+    #faq { background: var(--cream-dark); }
+    .faq-inner { max-width: 860px; margin: 0 auto; padding: 120px 80px; }
+    .faq-header { margin-bottom: 56px; }
+    .faq-title { color: var(--ink); }
+    .faq-list { display: flex; flex-direction: column; }
+    .faq-item { border-top: 1px solid color-mix(in oklch, var(--ink) 10%, transparent); }
+    .faq-item:last-child { border-bottom: 1px solid color-mix(in oklch, var(--ink) 10%, transparent); }
+    .faq-question {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; padding: 26px 0; cursor: pointer; list-style: none;
+      font-family: var(--font-display); font-size: 21px; font-weight: 400;
+      color: var(--ink); transition: color 0.2s;
+    }
+    .faq-question::-webkit-details-marker { display: none; }
+    .faq-item:hover .faq-question { color: var(--rose); }
+    .faq-icon { font-size: 22px; font-weight: 300; color: var(--rose); flex-shrink: 0; transition: transform 0.3s; }
+    .faq-item[open] .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      font-size: 15px; font-weight: 300; line-height: 1.8;
+      color: var(--ink-muted); padding-bottom: 26px; max-width: 680px;
+    }
+    @media (max-width: 900px) {
+      .faq-inner { padding: 80px 24px; }
+    }
+
+    /* ─── FOOTER ─── */
+    #footer { background: oklch(18% 0.012 52); }
+    .footer-inner {
+      max-width: 1280px; margin: 0 auto; padding: 44px 80px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 32px; flex-wrap: wrap;
+    }
+    .footer-brand { display: flex; flex-direction: column; gap: 4px; }
+    .footer-logo { font-family: var(--font-display); font-size: 18px; font-weight: 400; color: var(--cream); }
+    .footer-tagline { font-size: 11px; font-weight: 300; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rose); }
+    .footer-links { display: flex; gap: 28px; flex-wrap: wrap; }
+    .footer-links a {
+      font-size: 12px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase;
+      color: color-mix(in oklch, var(--cream) 40%, oklch(18% 0.012 52));
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--rose); }
+    .footer-legal { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .footer-legal a, .footer-legal span {
+      font-size: 11px; font-weight: 300;
+      color: color-mix(in oklch, var(--cream) 28%, oklch(18% 0.012 52));
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-legal a:hover { color: var(--cream); }
+    @media (max-width: 900px) {
+      .footer-inner { flex-direction: column; align-items: flex-start; padding: 44px 24px; }
+    }
+
+    /* ─── MOBILE NAV ─── */
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 60px 24px 40px; justify-content: flex-end; }
+      .hero-right { height: 260px; order: -1; }
+      .hero-scroll-hint { display: none; }
+    }
+
+    /* ─── BUTTON PAIR ─── */
+    .btn-pair { display: flex; gap: 14px; flex-direction: column; align-items: flex-start; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <a href="#hero" class="logo-wrap">
+      <div class="logo-main">PhysioTina <span>Beckenboden</span></div>
+      <div class="logo-sub">Kurs · Lorsch</div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#kurs">Der Kurs</a></li>
+      <li><a href="#preis">Preise</a></li>
+      <li><a href="#ueber-tina">Über mich</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+      <li><a href="#mitglieder">Mitglieder</a></li>
+    </ul>
+    <a href="#anmeldung" class="nav-cta">Jetzt anmelden</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Beckenbodenkurs · Lorsch</p>
+      <h1 class="hero-title">
+        Spür dich.<br>
+        <em>Stärke</em><br>
+        dich.
+      </h1>
+      <p class="hero-sub">
+        Ein professionell begleiteter Beckenbodenkurs — für mehr Körperbewusstsein,
+        Stabilität und Wohlbefinden. Geleitet von einer Physiotherapeutin,
+        Osteopathin und Heilpraktikerin.
+      </p>
+      <div class="hero-actions">
+        <a href="#anmeldung" class="btn-primary">Jetzt anmelden</a>
+        <a href="#kurs" class="btn-ghost">Mehr erfahren</a>
+      </div>
+      <div class="hero-badge">
+        <strong>Startpreis:</strong> 200 € für 10 Einheiten — nur für die erste Kursgruppe.
+      </div>
+    </div>
+    <div class="hero-right">
+      <img src="../forma-website/bild-hero.jpg" alt="Beckenbodenkurs" class="hero-image" />
+    </div>
+    <div class="hero-scroll-hint">Entdecken</div>
+  </section>
+
+  <!-- DER KURS -->
+  <section id="kurs">
+    <div class="kurs-inner">
+      <div class="kurs-header">
+        <p class="section-eyebrow">Was dich erwartet</p>
+        <h2 class="section-title" style="color: var(--cream);">Der <em style="color:var(--rose)">Kurs</em></h2>
+      </div>
+      <div class="kurs-grid">
+        <article class="kurs-card">
+          <div class="kurs-num">01</div>
+          <h3 class="kurs-card-title">Anatomie & Bewusstsein</h3>
+          <p class="kurs-card-text">Du lernst, wo dein Beckenboden ist und wie er funktioniert — das Fundament für alles Weitere.</p>
+        </article>
+        <article class="kurs-card">
+          <div class="kurs-num">02</div>
+          <h3 class="kurs-card-title">Aktivierung & Kräftigung</h3>
+          <p class="kurs-card-text">Gezielte Übungen zur Kräftigung der tiefen Muskulatur — sanft, effektiv und nachhaltig.</p>
+        </article>
+        <article class="kurs-card">
+          <div class="kurs-num">03</div>
+          <h3 class="kurs-card-title">Entspannung & Loslassen</h3>
+          <p class="kurs-card-text">Ein gesunder Beckenboden kann nicht nur anspannen — er muss auch loslassen können. Beides üben wir gemeinsam.</p>
+        </article>
+        <article class="kurs-card">
+          <div class="kurs-num">04</div>
+          <h3 class="kurs-card-title">Atmung & Haltung</h3>
+          <p class="kurs-card-text">Die Verbindung von Zwerchfell, Becken und Haltung im Alltag — für mehr Stabilität in Bewegung und Ruhe.</p>
+        </article>
+        <article class="kurs-card">
+          <div class="kurs-num">05</div>
+          <h3 class="kurs-card-title">Integration in den Alltag</h3>
+          <p class="kurs-card-text">Übungen und Impulse, die du direkt mitnehmen kannst — damit das Gelernte auch zwischen den Einheiten wirkt.</p>
+        </article>
+        <article class="kurs-card">
+          <div class="kurs-num">06</div>
+          <h3 class="kurs-card-title">Ganzheitlicher Blick</h3>
+          <p class="kurs-card-text">Als Osteopathin betrachte ich den Beckenboden nicht isoliert, sondern im Kontext des gesamten Körpers.</p>
+        </article>
+      </div>
+
+      <div class="kurs-details">
+        <div class="kurs-detail">
+          <div class="detail-label">Wochentag</div>
+          <div class="detail-value">Donnerstag</div>
+          <div class="detail-sub">17:45 Uhr</div>
+        </div>
+        <div class="kurs-detail">
+          <div class="detail-label">Einheiten</div>
+          <div class="detail-value">10 × 60 min</div>
+          <div class="detail-sub">Kleingruppenformat</div>
+        </div>
+        <div class="kurs-detail">
+          <div class="detail-label">Ort</div>
+          <div class="detail-value">Lorsch</div>
+          <div class="detail-sub">In d. Dieterswiese 6, 64653 Lorsch</div>
+        </div>
+        <div class="kurs-detail">
+          <div class="detail-label">Kursstart</div>
+          <div class="detail-value">04.04.2026</div>
+          <div class="detail-sub">Warteliste für nächste Gruppe</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREISE -->
+  <section id="preis">
+    <div class="preis-inner">
+      <div class="preis-header">
+        <p class="section-eyebrow">Investition</p>
+        <h2 class="section-title">Kursgebühren</h2>
+      </div>
+      <div class="preis-grid">
+        <div class="preis-card preis-card--featured">
+          <div class="preis-badge">Startpreis · Nur erste Gruppe</div>
+          <div class="preis-label">Gründungsangebot</div>
+          <div class="preis-amount"><sup>€</sup>200</div>
+          <div class="preis-unit">für 10 Einheiten · einmalig</div>
+          <ul class="preis-features">
+            <li class="preis-feature">10 begleitete Kurseinheiten à 60 Min.</li>
+            <li class="preis-feature">Unterlagen & Übungsanleitungen</li>
+            <li class="preis-feature">Exklusiver Mitgliederbereich</li>
+            <li class="preis-feature">Kleine Gruppe · persönliche Betreuung</li>
+            <li class="preis-feature">Nachhaltige Begleitung</li>
+          </ul>
+        </div>
+        <div class="preis-card">
+          <div class="preis-label">Regulärer Preis</div>
+          <div class="preis-amount"><sup>€</sup>279</div>
+          <div class="preis-unit">für 10 Einheiten · ab 2. Kursgruppe</div>
+          <ul class="preis-features">
+            <li class="preis-feature">10 begleitete Kurseinheiten à 60 Min.</li>
+            <li class="preis-feature">Unterlagen & Übungsanleitungen</li>
+            <li class="preis-feature">Exklusiver Mitgliederbereich</li>
+            <li class="preis-feature">Kleine Gruppe · persönliche Betreuung</li>
+            <li class="preis-feature">Nachhaltige Begleitung</li>
+          </ul>
+        </div>
+      </div>
+      <div class="preis-note">
+        <strong>Hinweis:</strong> Die Kursgebühr ist vor Kursbeginn zu entrichten. Bei Fragen zur Zahlung melde dich gern direkt per WhatsApp oder Telefon. Krankenkassen erstatten Beckenbodenkurse teilweise — ich berate dich dazu gerne.
+      </div>
+    </div>
+  </section>
+
+  <!-- ÜBER TINA -->
+  <section id="ueber-tina">
+    <div class="ueber-grid">
+      <div class="ueber-image-col">
+        <div class="ueber-image-wrap">
+          <img src="../forma-website/portrait.jpg" alt="Tina — Physiotherapeutin, Osteopathin, Heilpraktikerin" class="ueber-photo" />
+        </div>
+        <div class="ueber-deco"></div>
+      </div>
+      <div class="ueber-text-col">
+        <p class="section-eyebrow">Wer ich bin</p>
+        <h2 class="section-title ueber-title">Mit <em>Erfahrung</em><br>begleiten.</h2>
+        <p class="ueber-body">
+          Mein Name ist Tina. Ich bin staatlich geprüfte Physiotherapeutin, Osteopathin und Heilpraktikerin.
+          Der Beckenboden ist für mich nicht nur ein Muskel — er ist ein Spiegel unserer körperlichen und emotionalen Mitte.
+        </p>
+        <p class="ueber-body">
+          In meinem Kurs verbinde ich physiotherapeutisches Fachwissen mit osteopathischem Verständnis
+          für den ganzen Körper. Jede Einheit ist durchdacht — und du wirst persönlich begleitet, nicht
+          nur unterrichtet.
+        </p>
+        <div class="ueber-quals">
+          <div class="ueber-qual">
+            <span class="qual-label">Ausbildung</span>
+            <span class="qual-value">Staatl. gepr. Physiotherapeutin</span>
+          </div>
+          <div class="ueber-qual">
+            <span class="qual-label">Spezialisierung</span>
+            <span class="qual-value">Osteopathie</span>
+          </div>
+          <div class="ueber-qual">
+            <span class="qual-label">Heilpraktikerin</span>
+            <span class="qual-value">Zugelassene Heilpraktikerin</span>
+          </div>
+          <div class="ueber-qual">
+            <span class="qual-label">Praxis seit</span>
+            <span class="qual-value">2022</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANMELDUNG / WARTELISTE -->
+  <section id="anmeldung">
+    <div class="anmeldung-inner">
+      <div class="anmeldung-grid">
+        <div class="anmeldung-left">
+          <p class="section-eyebrow" style="color:var(--rose)">Mitmachen</p>
+          <h2 class="anmeldung-title">Jetzt<br><em>anmelden</em></h2>
+          <p class="anmeldung-sub">
+            Der erste Kurs läuft bereits — trag dich jetzt in die Warteliste ein und sei bei der nächsten Gruppe dabei.
+          </p>
+          <div class="anmeldung-info-list">
+            <div class="anmeldung-info-row">
+              <span class="info-key">Kurs</span>
+              <span class="info-val">Beckenbodenkurs</span>
+            </div>
+            <div class="anmeldung-info-row">
+              <span class="info-key">Tag & Zeit</span>
+              <span class="info-val">Donnerstag · 17:45 Uhr</span>
+            </div>
+            <div class="anmeldung-info-row">
+              <span class="info-key">Ort</span>
+              <span class="info-val">Lorsch</span>
+            </div>
+            <div class="anmeldung-info-row">
+              <span class="info-key">Preis ab</span>
+              <span class="info-val">200 € · 10 Einheiten</span>
+            </div>
+          </div>
+        </div>
+        <div class="anmeldung-form-wrap">
+          <p class="form-eyebrow">Warteliste & Anmeldung</p>
+          <form class="anmeldung-form" onsubmit="handleAnmeldung(event)">
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label" for="anm-name">Name <span class="form-req">*</span></label>
+                <input class="form-input" type="text" id="anm-name" name="name" placeholder="Vor- und Nachname" required />
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="anm-email">E-Mail <span class="form-req">*</span></label>
+                <input class="form-input" type="email" id="anm-email" name="email" placeholder="deine@email.de" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label" for="anm-tel">Telefon <span class="form-opt">(optional)</span></label>
+                <input class="form-input" type="tel" id="anm-tel" name="telefon" placeholder="+49 000 000000" />
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="anm-interesse">Ich möchte</label>
+                <select class="form-input form-select" id="anm-interesse" name="interesse">
+                  <option value="" disabled selected>Bitte wählen …</option>
+                  <option value="warteliste">Warteliste nächster Kurs</option>
+                  <option value="anmeldung">Direkt anmelden (noch Plätze frei?)</option>
+                  <option value="info">Erst mehr Infos</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="anm-nachricht">Nachricht <span class="form-opt">(optional)</span></label>
+              <textarea class="form-input form-textarea" id="anm-nachricht" name="nachricht" rows="4" placeholder="Fragen, Anmerkungen, Vorerfahrungen …"></textarea>
+            </div>
+            <div class="form-footer-row">
+              <p class="form-privacy">Mit dem Absenden stimmst du der <a href="#">Datenschutzerklärung</a> zu.</p>
+              <button type="submit" class="btn-submit">
+                <span>Eintragen</span>
+                <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+            </div>
+            <div class="form-success" id="anm-success">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+              </svg>
+              <p>Danke! Ich melde mich bald bei dir.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
+  <section id="kontakt">
+    <div class="kontakt-inner">
+      <div class="kontakt-grid">
+        <div class="kontakt-left">
+          <p class="section-eyebrow">Direkt schreiben</p>
+          <h2 class="section-title kontakt-title">In <em>Kontakt</em><br>treten.</h2>
+          <p class="kontakt-sub">Fragen zum Kurs, zum Ablauf oder zur Anmeldung — schreib mich einfach an.</p>
+          <div class="btn-pair">
+            <a href="https://wa.me/4915901961346?text=Hallo%20Tina%2C%20ich%20interessiere%20mich%20f%C3%BCr%20den%20Beckenbodenkurs."
+               class="whatsapp-btn" target="_blank" rel="noopener noreferrer">
+              <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.121 1.535 5.856L.057 23.625a.75.75 0 00.918.918l5.769-1.478A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.704 9.704 0 01-4.945-1.352l-.355-.21-3.667.939.955-3.576-.23-.368A9.712 9.712 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+              </svg>
+              <span>WhatsApp schreiben</span>
+            </a>
+            <a href="https://www.instagram.com/physio.tina" class="insta-btn" target="_blank" rel="noopener noreferrer">
+              <svg class="insta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+              <span>@physio.tina</span>
+            </a>
+          </div>
+          <div class="kontakt-channels">
+            <a href="tel:015901961346" class="kontakt-channel">
+              <div class="ch-left">
+                <div class="ch-icon">
+                  <svg viewBox="0 0 20 20" fill="none" stroke="var(--rose)" stroke-width="1.4">
+                    <path stroke-linecap="round" d="M2 3.5A1.5 1.5 0 013.5 2h1.148a1.5 1.5 0 011.465 1.175l.716 3.223a1.5 1.5 0 01-.43 1.395l-.75.75a14.37 14.37 0 005.808 5.808l.75-.75a1.5 1.5 0 011.395-.43l3.223.716A1.5 1.5 0 0118 15.352V16.5A1.5 1.5 0 0116.5 18h-.75C7.58 18 2 12.42 2 5.75V3.5z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="ch-label">Telefon</div>
+                  <div class="ch-val">01590 · 1961346</div>
+                </div>
+              </div>
+              <span class="ch-arrow">→</span>
+            </a>
+          </div>
+        </div>
+        <div class="kontakt-form-wrap">
+          <p class="form-eyebrow">Nachricht senden</p>
+          <form class="kontakt-form" onsubmit="handleKontakt(event)">
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label" for="k-name">Name <span class="form-req">*</span></label>
+                <input class="form-input" type="text" id="k-name" name="name" placeholder="Dein Name" required />
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="k-email">E-Mail <span class="form-req">*</span></label>
+                <input class="form-input" type="email" id="k-email" name="email" placeholder="deine@email.de" required />
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="k-betreff">Betreff</label>
+              <select class="form-input form-select" id="k-betreff" name="betreff">
+                <option value="" disabled selected>Bitte wählen …</option>
+                <option value="kurs">Frage zum Kurs</option>
+                <option value="anmeldung">Anmeldung / Warteliste</option>
+                <option value="preis">Preise & Konditionen</option>
+                <option value="sonstiges">Sonstiges</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="k-nachricht">Nachricht <span class="form-req">*</span></label>
+              <textarea class="form-input form-textarea" id="k-nachricht" name="nachricht" rows="5" placeholder="Was möchtest du wissen?" required></textarea>
+            </div>
+            <div class="form-footer-row">
+              <p class="form-privacy">Mit dem Absenden stimmst du der <a href="#">Datenschutzerklärung</a> zu.</p>
+              <button type="submit" class="btn-submit">
+                <span>Senden</span>
+                <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+            </div>
+            <div class="form-success" id="k-success">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+              </svg>
+              <p>Danke für deine Nachricht! Ich melde mich bald.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="faq-inner">
+      <div class="faq-header">
+        <p class="section-eyebrow">Häufige Fragen</p>
+        <h2 class="section-title faq-title">FAQ</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Für wen ist der Kurs geeignet?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <p class="faq-answer">Der Kurs richtet sich an alle, die ihren Beckenboden gezielt stärken und kennenlernen möchten — egal ob nach Schwangerschaft, bei Beschwerden oder einfach als Prävention. Vorkenntnisse sind nicht erforderlich.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Wie groß ist die Kursgruppe?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <p class="faq-answer">Die Gruppe ist bewusst klein gehalten, damit jede Teilnehmerin persönlich betreut werden kann. Genaue Infos zur Platzzahl gerne auf Anfrage.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Übernimmt die Krankenkasse die Kosten?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <p class="faq-answer">Viele gesetzliche Krankenkassen bezuschussen Beckenbodenkurse im Rahmen der Prävention. Ich berate dich gerne, welche Unterlagen du dafür benötigst.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Was soll ich mitbringen?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <p class="faq-answer">Bequeme Kleidung, eine Gymnastikmatte (oder leih eine vor Ort), und offene Neugier. Mehr brauchst du nicht.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Was passiert, wenn ich eine Einheit verpasse?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <p class="faq-answer">Im Mitgliederbereich findest du Übungsanleitungen und Materialien zu jeder Einheit — so bleibt kein Schritt verloren. Bei häufigeren Abwesenheiten sprechen wir gemeinsam eine Lösung ab.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Wie melde ich mich an?</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <p class="faq-answer">Einfach das Anmeldeformular weiter oben ausfüllen oder direkt per WhatsApp oder Telefon melden. Ich freue mich von dir zu hören.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- MITGLIEDERBEREICH -->
+  <section id="mitglieder">
+    <div class="mitglieder-inner">
+      <div class="mitglieder-header">
+        <p class="section-eyebrow">Nur für Kursteilnehmer</p>
+        <h2 class="section-title mitglieder-title">Mitglieder<em>bereich</em></h2>
+        <p class="mitglieder-sub">Hier findest du alle Unterlagen, Übungsanleitungen und PDFs zu deinem Kurs. Dein Passwort erhältst du von mir persönlich.</p>
+      </div>
+
+      <!-- Login -->
+      <div id="member-locked">
+        <div class="pw-form">
+          <input class="pw-input" type="password" id="member-pw" placeholder="Passwort eingeben …" />
+          <button class="pw-btn" onclick="checkPassword()">Zugang</button>
+        </div>
+        <p class="pw-error" id="pw-error">Falsches Passwort. Bitte versuche es erneut.</p>
+      </div>
+
+      <!-- Inhalt (versteckt bis Passwort korrekt) -->
+      <div id="member-content">
+        <div class="member-welcome">
+          <strong>Willkommen im Mitgliederbereich!</strong> Hier findest du alle Unterlagen zu deinem Beckenbodenkurs. Die Dateien werden laufend ergänzt.
+        </div>
+
+        <h3 class="pdf-section-title">Kursunterlagen</h3>
+        <div class="pdf-list">
+          <!-- PDF-Einträge hier einfügen — Beispiel: -->
+          <!--
+          <a href="pdfs/einheit-01.pdf" class="pdf-item" target="_blank">
+            <div class="pdf-item-left">
+              <div class="pdf-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="1.6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                  <path stroke-linecap="round" d="M12 3v6h6"/>
+                </svg>
+              </div>
+              <div>
+                <div class="pdf-name">Einheit 1 · Anatomie & Bewusstsein</div>
+                <div class="pdf-meta">PDF · Übungsanleitung</div>
+              </div>
+            </div>
+            <span class="pdf-download">↓ Download</span>
+          </a>
+          -->
+          <div class="pdf-placeholder">
+            Unterlagen werden nach und nach hier hochgeladen. Schau regelmäßig vorbei!
+          </div>
+        </div>
+
+        <h3 class="pdf-section-title">Bonusmaterial</h3>
+        <div class="pdf-list">
+          <div class="pdf-placeholder">
+            Bonusmaterial folgt im Laufe des Kurses.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">PhysioTina · Beckenboden</span>
+        <p class="footer-tagline">Spür dich. Stärke dich.</p>
+      </div>
+      <nav class="footer-links" aria-label="Footer Navigation">
+        <a href="#kurs">Der Kurs</a>
+        <a href="#preis">Preise</a>
+        <a href="#ueber-tina">Über mich</a>
+        <a href="#anmeldung">Anmelden</a>
+        <a href="#kontakt">Kontakt</a>
+        <a href="#mitglieder">Mitglieder</a>
+      </nav>
+      <div class="footer-legal">
+        <a href="#">Impressum</a>
+        <a href="#">Datenschutz</a>
+        <span>© 2026 PhysioTina</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function checkPassword() {
+      const input = document.getElementById('member-pw').value;
+      const error = document.getElementById('pw-error');
+      const locked = document.getElementById('member-locked');
+      const content = document.getElementById('member-content');
+      if (input === 'Mütze2026') {
+        locked.style.display = 'none';
+        error.classList.remove('visible');
+        content.classList.add('visible');
+      } else {
+        error.classList.add('visible');
+      }
+    }
+
+    document.getElementById('member-pw').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkPassword();
+    });
+
+    function handleAnmeldung(e) {
+      e.preventDefault();
+      const form = e.target;
+      form.querySelectorAll('input, select, textarea, button').forEach(el => el.disabled = true);
+      document.getElementById('anm-success').classList.add('visible');
+    }
+
+    function handleKontakt(e) {
+      e.preventDefault();
+      const form = e.target;
+      form.querySelectorAll('input, select, textarea, button').forEach(el => el.disabled = true);
+      document.getElementById('k-success').classList.add('visible');
+    }
+  </script>
+
+</body>
+</html>
